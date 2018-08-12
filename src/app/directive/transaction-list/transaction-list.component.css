@@ -1,0 +1,12 @@
+.row {
+    margin-right: 0px;
+    margin-left: 0px;
+}
+
+.date-time-picker-popover {
+    max-width: none;
+}
+
+.date-time-picker-popover .popover-content {
+    padding: 0;
+}
