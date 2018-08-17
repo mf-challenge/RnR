@@ -19,6 +19,7 @@ import { PageHeaderModule } from '@ux-aspects/ux-aspects';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { TransactionListComponent } from './directive/transaction-list/transaction-list.component';
 import { AccountSummaryComponent } from './directive/account-summary/account-summary.component';
+import { RegisterComponent } from './register/register.component';
 
 
 @NgModule({
@@ -27,7 +28,8 @@ import { AccountSummaryComponent } from './directive/account-summary/account-sum
     LoginComponent,
     HomeComponent,
     TransactionListComponent,
-    AccountSummaryComponent
+    AccountSummaryComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,
