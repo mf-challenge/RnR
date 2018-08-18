@@ -73,22 +73,24 @@ export class Web3EmbeddedService {
 		.then(events => {
 			console.log("total number of recognitions sent", events.length);
 			
-			for(let i: number =0; i< events.length; i++)
+			for(let event of events)
 			{
-				this.web3I.eth.getBlock(events[i].blockNumber).then( blk => {
+				console.log("sent ", event.returnValues.value, "to ",  this.lookupUser(event.returnValues.to));
+				/*this.web3I.eth.getBlock(events[i].blockNumber).then( blk => {
 					console.log("date ", this.convertTime(blk.timestamp), "sent ", events[i].returnValues.value, "to ",  this.lookupUser(events[i].returnValues.to));
-				})		
+				})*/		
 				
 			}
 		})
 	contractI.getPastEvents('Transfer',{'filter':{'to': userAccount}})
 		.then(events => {
 			console.log("total number of recognitions received", events.length)
-			for(let i: number =0; i< events.length; i++)
+			for(let event of events)
 			{
-				this.web3I.eth.getBlock(events[i].blockNumber).then( blk => {
+				console.log("received ", event.returnValues.value, "from ",  this.lookupUser(event.returnValues.to));
+				/*this.web3I.eth.getBlock(events[i].blockNumber).then( blk => {
 					console.log("date ", this.convertTime(blk.timestamp), "received ", events[i].returnValues.value, "from ",  this.lookupUser(events[i].returnValues.to));
-				})	
+				})*/	
 				
 			}
 		})
