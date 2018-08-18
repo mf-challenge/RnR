@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Web3EmbeddedService } from '../web3-embedded.service';
 
 @Component({
   selector: 'app-login',
