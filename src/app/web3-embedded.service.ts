@@ -6,7 +6,7 @@ import Web3 from 'web3';
 })
 export class Web3EmbeddedService {
 
-  private bcNetwork: string = "http://localhost:8566";
+  private bcNetwork: string = "http://15.114.245.91:8566";
   private web3I: Web3;
   private tokenContract: string;
   private tokenInterface: string;

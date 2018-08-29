@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {UserService} from '../service/user.service';
+import {User} from '../entity/user';
 
 @Component({
   selector: 'app-register',
@@ -19,6 +20,10 @@ export class RegisterComponent implements OnInit {
   singnUp()
   {
     console.log("singnUp");
-    this.userService.registerUser(this.email,this.password,this.username);
+    let usr = new User();
+    usr.email = this.email;
+    usr.password = this.password;
+    usr.username = this.username;
+    this.userService.registerUser(usr);
   }
 }
