@@ -17,12 +17,16 @@ export class UserService {
     console.log("New user address created as " +address);
 
     // Save user meta data
-    this.userManagementService.registerUser(user).subscribe(data => {
-      console.log(data);
+    this.userManagementService.registerUser(user).subscribe(resp  => {
+     // console.log(resp);
     });
   }
 
-  authenticateUser() {
-    console.log("UserService.authenticateUser");
+  authenticateUser(user: User) {
+
+    // Get user meta data
+    this.userManagementService.authenticateUser(user).subscribe(resp  => {
+       console.log(resp);
+     });
   }
 }
