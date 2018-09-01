@@ -14,7 +14,10 @@ export class AppComponent {
   title = 'app';
   
   constructor(private web3Service: Web3EmbeddedService) { 
-//	this.web3Service.getBalance("test","test@123")
-//	.then(receipt => console.log("receipt is ", receipt));
+this.web3Service.getRewardsReceived("0x9699e9c75366cd824ab8711801cc2390e9778978")
+	.then(receipt => console.log("receipt is ", receipt));
+	
+	this.web3Service.getBalance("a","b")
+	.then(receipt => console.log("token balance is ", receipt));;
   }
 }
