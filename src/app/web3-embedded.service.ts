@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { UserManagementService } from './user-management.service'
 import Web3 from 'web3';
 
 @Injectable({
@@ -11,7 +12,7 @@ export class Web3EmbeddedService {
   private tokenContract: string;
   private tokenInterface: any;
   
-  constructor() { 
+  constructor(private userManagementService: UserManagementService) { 
 	this.web3I = new Web3(new Web3.providers.HttpProvider(this.bcNetwork));
 	this.tokenContract = "0xd55335DAfd6cCC3c8293E10d4F3Df9A16c154d47";
 	this.tokenInterface = [{'constant':true,'inputs':[],'name':'name','outputs':[{'name':'','type':'string'}],'payable':false,'stateMutability':'view','type':'function'},{'constant':false,'inputs':[{'name':'spender','type':'address'},{'name':'value','type':'uint256'}],'name':'approve','outputs':[{'name':'','type':'bool'}],'payable':false,'stateMutability':'nonpayable','type':'function'},{'constant':true,'inputs':[],'name':'totalSupply','outputs':[{'name':'','type':'uint256'}],'payable':false,'stateMutability':'view','type':'function'},{'constant':false,'inputs':[{'name':'from','type':'address'},{'name':'to','type':'address'},{'name':'value','type':'uint256'}],'name':'transferFrom','outputs':[{'name':'','type':'bool'}],'payable':false,'stateMutability':'nonpayable','type':'function'},{'constant':true,'inputs':[],'name':'INITIAL_SUPPLY','outputs':[{'name':'','type':'uint256'}],'payable':false,'stateMutability':'view','type':'function'},{'constant':true,'inputs':[],'name':'decimals','outputs':[{'name':'','type':'uint8'}],'payable':false,'stateMutability':'view','type':'function'},{'constant':false,'inputs':[],'name':'unpause','outputs':[],'payable':false,'stateMutability':'nonpayable','type':'function'},{'constant':true,'inputs':[],'name':'paused','outputs':[{'name':'','type':'bool'}],'payable':false,'stateMutability':'view','type':'function'},{'constant':false,'inputs':[{'name':'spender','type':'address'},{'name':'subtractedValue','type':'uint256'}],'name':'decreaseApproval','outputs':[{'name':'','type':'bool'}],'payable':false,'stateMutability':'nonpayable','type':'function'},{'constant':true,'inputs':[{'name':'_owner','type':'address'}],'name':'balanceOf','outputs':[{'name':'','type':'uint256'}],'payable':false,'stateMutability':'view','type':'function'},{'constant':false,'inputs':[],'name':'pause','outputs':[],'payable':false,'stateMutability':'nonpayable','type':'function'},{'constant':true,'inputs':[],'name':'owner','outputs':[{'name':'','type':'address'}],'payable':false,'stateMutability':'view','type':'function'},{'constant':true,'inputs':[],'name':'symbol','outputs':[{'name':'','type':'string'}],'payable':false,'stateMutability':'view','type':'function'},{'constant':false,'inputs':[{'name':'to','type':'address'},{'name':'value','type':'uint256'}],'name':'transfer','outputs':[{'name':'','type':'bool'}],'payable':false,'stateMutability':'nonpayable','type':'function'},{'constant':false,'inputs':[{'name':'spender','type':'address'},{'name':'addedValue','type':'uint256'}],'name':'increaseApproval','outputs':[{'name':'','type':'bool'}],'payable':false,'stateMutability':'nonpayable','type':'function'},{'constant':true,'inputs':[{'name':'_owner','type':'address'},{'name':'_spender','type':'address'}],'name':'allowance','outputs':[{'name':'','type':'uint256'}],'payable':false,'stateMutability':'view','type':'function'},{'constant':false,'inputs':[{'name':'newOwner','type':'address'}],'name':'transferOwnership','outputs':[],'payable':false,'stateMutability':'nonpayable','type':'function'},{'inputs':[],'payable':false,'stateMutability':'nonpayable','type':'constructor'},{'anonymous':false,'inputs':[],'name':'Pause','type':'event'},{'anonymous':false,'inputs':[],'name':'Unpause','type':'event'},{'anonymous':false,'inputs':[{'indexed':true,'name':'previousOwner','type':'address'},{'indexed':true,'name':'newOwner','type':'address'}],'name':'OwnershipTransferred','type':'event'},{'anonymous':false,'inputs':[{'indexed':true,'name':'owner','type':'address'},{'indexed':true,'name':'spender','type':'address'},{'indexed':false,'name':'value','type':'uint256'}],'name':'Approval','type':'event'},{'anonymous':false,'inputs':[{'indexed':true,'name':'from','type':'address'},{'indexed':true,'name':'to','type':'address'},{'indexed':false,'name':'value','type':'uint256'}],'name':'Transfer','type':'event'}]
@@ -71,7 +72,7 @@ export class Web3EmbeddedService {
   getRewardsSent(userAccount: string): Promise<any>
   {
 	let contractI 		= new this.web3I.eth.Contract(this.tokenInterface, this.tokenContract);
-	//console.log("contract is ", contractI.getPastEvents);
+	
 	return contractI.getPastEvents('Transfer',{'fromBlock':0,'filter':{'from': userAccount}})
 		.then(events => {
 			console.log("total number of recognitions sent", events.length);
@@ -79,13 +80,14 @@ export class Web3EmbeddedService {
 			let trans:any [] = [];
 			for(let event of events)
 			{
-				console.log("sent ", event.returnValues.value, "to ",  this.lookupUser(event.returnValues.to));
-				
-				trans.push({'sent': event.returnValues.value, 'to': this.lookupUser(event.returnValues.to)});
+				trans.push(this.lookupUser(event.returnValues.to)
+					.then(username => {
+						return {'sent': event.returnValues.value, 'to': username.message};
+					}));
 				
 			}
 			
-			return trans;
+			return Promise.all(trans);
 		});
 		
 		
@@ -95,7 +97,6 @@ export class Web3EmbeddedService {
 	{
 	let contractI: any 		= new this.web3I.eth.Contract(this.tokenInterface, this.tokenContract);
 	
-	//console.log("contract is ", contractI);
 	return contractI.getPastEvents('Transfer',{'fromBlock':0,'filter':{'to': userAccount}})
 		.then(events => {
 			console.log("total number of recognitions received", events.length)
@@ -103,12 +104,12 @@ export class Web3EmbeddedService {
 			let trans:any [] = [];
 			for(let event of events)
 			{
-				console.log("received ", event.returnValues.value, "from ",  this.lookupUser(event.returnValues.to));
-			
-				trans.push({'received': event.returnValues.value, 'from': this.lookupUser(event.returnValues.to)});
-				
+				trans.push(this.lookupUser(event.returnValues.from)
+					.then(username => {
+						return {'received': event.returnValues.value, 'from': username.message};
+					}));	
 			}
-			return trans;
+			return Promise.all(trans);
 		})
 	
 	}
@@ -118,13 +119,13 @@ export class Web3EmbeddedService {
 		return timestamp;
 	}
 	
-  lookupAccount(rewardee: string): string
+  lookupAccount(rewardee: string): Promise<any>
   {
-	return rewardee;
+	return this.userManagementService.lookupAddress(rewardee).toPromise();
   }
-  lookupUser(rewardee: string): string
+  lookupUser(rewardee: string): Promise<any>
   {
-	return rewardee;
+	return this.userManagementService.lookupUser(rewardee).toPromise();
   }
   
   sendEth(username: string, password: string): Promise<any>
