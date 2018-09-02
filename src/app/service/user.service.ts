@@ -9,6 +9,8 @@ import { Router } from '@angular/router';
 })
 export class UserService {
 
+  loggedInUser:User;
+
   constructor(private web3: Web3EmbeddedService, private userManagementService: UserManagementService, private router: Router) { }
 
   registerUser(user: User) {
@@ -28,6 +30,7 @@ export class UserService {
     // Get user meta data
     this.userManagementService.authenticateUser(user).subscribe(resp  => {
        console.log(resp);
+       this.loggedInUser = user;
        this.router.navigate(['/home']);
      });
   }
