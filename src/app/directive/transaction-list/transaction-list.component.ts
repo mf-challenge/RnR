@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { AfterViewInit, ElementRef, OnDestroy, ViewChild, ViewEncapsulation } from '@angular/core';
 import { DateTimePickerTimezone } from '@ux-aspects/ux-aspects';
 import { Subscription } from 'rxjs/Subscription';
@@ -12,12 +12,20 @@ import { debounceTime } from 'rxjs/operators';
 })
 export class TransactionListComponent implements OnInit {
 
+@Input() listheader: string;
+@Input() fromToColumn: string;
+@Input() dataSet: any[];
+
   constructor() { }
 
   ngOnInit() {
+    console.log(JSON.stringify(this.dataSet));
   }
 
   @ViewChild('input') dateInput: ElementRef;
+
+ 
+
 
   date: Date = new Date();
   timezone: DateTimePickerTimezone = { name: 'GMT', offset: 0 };

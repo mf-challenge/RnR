@@ -15,13 +15,29 @@ export class HomeComponent implements OnInit {
 
   condensed: boolean = true;
 
+  patted :[
+    {
+      "serial":1,
+      "name":"Loma Laroche",
+      "value":200
+    }
+  ];
+
+  pattedBy :[
+    {
+      "serial":1,
+      "name":"Loma Laroche",
+      "value":200
+    }
+  ];
+
   crumbs: Breadcrumb[] = [
     {
-      title: 'Archive',
+      title: 'Micro Focus',
       onClick: () => { }
     },
     {
-      title: '2017',
+      title: 'Pats',
       onClick: () => { }
     }
   ];
@@ -64,7 +80,7 @@ export class HomeComponent implements OnInit {
       dropdown: [
         {
           icon: 'hpe-payment-mastercard',
-          title: 'You have 3100 points',
+          title: 'You have 3100 Micro Pats',
           subtitle: 'Now',
           divider: true
         }
@@ -103,15 +119,16 @@ export class HomeComponent implements OnInit {
           divider: true
         },
         {
+          icon: 'hpe-halt',
+          title: 'Pat your peer'
+        },
+        {
           icon: 'hpe-user-settings',
           title: 'Settings'
         },
         {
           icon: 'hpe-logout',
           title: 'Log Out'
-        },
-        {
-          title: 'Show Tips'
         }
       ]
     }

@@ -5,12 +5,47 @@
   [iconMenus]="iconMenus">
 </ux-page-header>
 
-
-
-<app-account-summary></app-account-summary>
 <div class="row">
-    <div class="col-xs-12 col-md-6"><app-transaction-list></app-transaction-list></div>
-    <div class="col-xs-6 col-md-6"><app-transaction-list></app-transaction-list></div>
+    <div class="col-xs-6 col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-body">
+            <form role="form" novalidate>
+                <div class="form-group">
+                    <label class="form-label">Peer Email</label>
+                    <input type="email" placeholder="Enter email" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Citation</label>
+                    <input type="text" placeholder="Summarize the great work by your preer" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Points</label>
+                    <input type="text" placeholder="Enter micro pat points" class="form-control">
+                </div>
+                <div>
+                    <button class="btn button-primary pull-right" type="submit">Pat
+                    </button>
+                </div>
+            </form>
+          </div>
+          </div>
+    </div>
+    <div class="col-xs-6 col-md-6">
+        <app-account-summary></app-account-summary>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xs-12 col-md-6"><app-transaction-list 
+      [dataSet]="pattedBy"
+      [fromToColumn]="'Received from'"
+      [listheader]="'Recognized by Peers'">
+    </app-transaction-list></div>
+    <div class="col-xs-12 col-md-6"><app-transaction-list
+      [dataSet]="patted" 
+      [fromToColumn]="'Sent to'"
+      [listheader]="'Peers Recognized'">
+    </app-transaction-list></div>
   </div>
 
 

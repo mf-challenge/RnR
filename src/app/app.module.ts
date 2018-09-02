@@ -21,6 +21,7 @@ import { TransactionListComponent } from './directive/transaction-list/transacti
 import { AccountSummaryComponent } from './directive/account-summary/account-summary.component';
 import { RegisterComponent } from './register/register.component';
 import { HttpClientModule } from '@angular/common/http';
+import { PatsComponent } from './pats/pats/pats.component';
 
 
 @NgModule({
@@ -30,7 +31,8 @@ import { HttpClientModule } from '@angular/common/http';
     HomeComponent,
     TransactionListComponent,
     AccountSummaryComponent,
-    RegisterComponent
+    RegisterComponent,
+    PatsComponent
   ],
   imports: [
     BrowserModule,
