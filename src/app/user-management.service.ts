@@ -34,4 +34,15 @@ export class UserManagementService {
 
     return this.http.get<User>(this.url + 'users/signIn', { headers: headers });
   }
+  
+  lookupUser(address: String) {
+  
+	return this.http.get(this.url + 'users/address/'+address);
+  }
+  
+  lookupAddress(user: String) {
+  
+	return this.http.get(this.url + 'users/username/'+user);
+  }
+  
 }
